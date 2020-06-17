@@ -1,4 +1,4 @@
-import request from 'superagent'
+import * as request from 'superagent'
 
 class CustomersMailCloud {
   _apiUser: string
@@ -71,6 +71,8 @@ class CustomersMailCloud {
   }
 
   async send(): Promise<object> {
+    console.log(request)
+
     const params: {[key: string]: any} = {
       api_user: this._apiUser,
       api_key: this._apiKey,

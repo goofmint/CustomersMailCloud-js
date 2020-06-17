@@ -1,0 +1,12 @@
+{
+  "api_user": "YOUR_USER",
+  "api_key": "YOUR_KEY",
+  "from": {
+    "name": "NAME",
+    "address": "ADDRESS"
+  },
+  "to": {
+    "name": "NAME",
+    "address": "ADDRESS"
+  }
+}
