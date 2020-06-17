@@ -1,0 +1,23 @@
+{
+  "name": "customersmailcloud",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha --require ts-node/register --watch-extensions ts \"test/**/*.ts\""
+  },
+  "author": "Atsushi Nakatsugawa",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/chai": "^4.2.11",
+    "@types/mocha": "^7.0.2",
+    "@types/superagent": "^4.1.7",
+    "chai": "^4.2.0",
+    "mocha": "^8.0.1",
+    "ts-node": "^8.10.2",
+    "typescript": "^3.9.5"
+  },
+  "dependencies": {
+    "superagent": "^5.2.2"
+  }
+}
