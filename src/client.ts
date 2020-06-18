@@ -1,8 +1,9 @@
 import * as request from 'superagent'
+import Bounce from './bounce'
 
 class CustomersMailCloud {
-  _apiUser: string
-  _apiKey: string
+  apiUser: string
+  apiKey: string
   _type: number = 0
   _subdomain: string | null = null
   _to: {[key: string]: string}[] = []
@@ -12,8 +13,8 @@ class CustomersMailCloud {
   _html: string | null = null
 
   constructor(apiUser:string, apiKey: string) {
-    this._apiUser = apiUser
-    this._apiKey = apiKey
+    this.apiUser = apiUser
+    this.apiKey = apiKey
   }
 
   pro(subdomain:string): CustomersMailCloud {
@@ -71,11 +72,9 @@ class CustomersMailCloud {
   }
 
   async send(): Promise<object> {
-    console.log(request)
-
     const params: {[key: string]: any} = {
-      api_user: this._apiUser,
-      api_key: this._apiKey,
+      api_user: this.apiUser,
+      api_key: this.apiKey,
       to: this._to,
       from: this._from,
       subject: this._subject,
@@ -86,6 +85,10 @@ class CustomersMailCloud {
       .post(this.url())
       .send(params);
     return result.body
+  }
+
+  bounce(): Bounce {
+    return new Bounce(this)
   }
 }
 

@@ -37,93 +37,83 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 exports.__esModule = true;
 var request = require("superagent");
-var bounce_1 = require("./bounce");
-var CustomersMailCloud = /** @class */ (function () {
-    function CustomersMailCloud(apiUser, apiKey) {
-        this._type = 0;
-        this._subdomain = null;
-        this._to = [];
-        this._from = {};
-        this._subject = null;
-        this._text = null;
-        this._html = null;
-        this.apiUser = apiUser;
-        this.apiKey = apiKey;
+var mail_1 = require("./mail");
+var Bounce = /** @class */ (function () {
+    function Bounce(client) {
+        this._limit = 10;
+        this._serverComposition = null;
+        this._params = {};
+        this._url = 'https://api.smtps.jp/transaction/v2/bounces/list.json';
+        this._client = client;
     }
-    CustomersMailCloud.prototype.pro = function (subdomain) {
-        this._subdomain = subdomain;
-        this._type = 3;
-        return this;
-    };
-    CustomersMailCloud.prototype.trial = function () {
-        this._type = 1;
-        return this;
-    };
-    CustomersMailCloud.prototype.standard = function () {
-        this._type = 2;
-        return this;
-    };
-    CustomersMailCloud.prototype.addTo = function (name, address) {
-        this._to.push({ name: name, address: address });
-        return this;
-    };
-    CustomersMailCloud.prototype.setFrom = function (name, address) {
-        this._from = { name: name, address: address };
-        return this;
-    };
-    CustomersMailCloud.prototype.setSubject = function (str) {
-        this._subject = str;
-        return this;
-    };
-    CustomersMailCloud.prototype.setText = function (str) {
-        this._text = str;
-        return this;
-    };
-    CustomersMailCloud.prototype.setHtml = function (str) {
-        this._html = str;
-        return this;
-    };
-    CustomersMailCloud.prototype.url = function () {
-        switch (this._type) {
-            case 1:
-                return 'https://sandbox.smtps.jp/api/v2/emails/send.json';
-            case 2:
-                return 'https://te.smtps.jp/api/v2/emails/send.json';
-            case 3:
-                return "https://" + this._subdomain + ".smtps.jp/api/v2/emails/send.json";
-            default:
-                throw new Error('利用種別を選んでください。 trial() / standard() / pro(subdomain)');
-        }
-    };
-    CustomersMailCloud.prototype.send = function () {
+    Bounce.prototype.list = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var params, result;
+            var params, result, bounces;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        params = {
-                            api_user: this.apiUser,
-                            api_key: this.apiKey,
-                            to: this._to,
-                            from: this._from,
-                            subject: this._subject,
-                            text: this._text
-                        };
-                        if (this._html)
-                            params.html = this._html;
+                        params = this._params;
+                        params.api_user = this._client.apiUser;
+                        params.api_key = this._client.apiKey;
+                        if (this._serverComposition) {
+                            params.server_composition = this._serverComposition;
+                        }
+                        else {
+                            throw new Error('Server Composition is required.');
+                        }
                         return [4 /*yield*/, request
-                                .post(this.url())
+                                .post(this._url)
                                 .send(params)];
                     case 1:
                         result = _a.sent();
-                        return [2 /*return*/, result.body];
+                        if (!result.body.bounces) {
+                            return [2 /*return*/, []];
+                        }
+                        bounces = result.body.bounces;
+                        return [2 /*return*/, bounces.map(function (params) { return new mail_1.CMCMail(params); })];
                 }
             });
         });
     };
-    CustomersMailCloud.prototype.bounce = function () {
-        return new bounce_1["default"](this);
+    Bounce.prototype.setServerComposition = function (name) {
+        this._serverComposition = name;
     };
-    return CustomersMailCloud;
+    Bounce.prototype.setEmail = function (address) {
+        this._params.email = address;
+    };
+    Bounce.prototype.setStatus = function (status) {
+        this._params.status = status;
+    };
+    Bounce.prototype.setStartDate = function (date) {
+        this._params.start_date = this.getDate(date);
+    };
+    Bounce.prototype.setEndDate = function (date) {
+        this._params.end_date = this.getDate(date);
+    };
+    Bounce.prototype.setDate = function (date) {
+        this._params.date = this.getDate(date);
+    };
+    Bounce.prototype.setHour = function (hour) {
+        if (hour < 0 || hour > 23) {
+            throw new Error('setHour allows the range from 0 to 23.');
+        }
+        this._params.hour = hour;
+    };
+    Bounce.prototype.setMinute = function (minute) {
+        if (minute < 0 || minute > 59) {
+            throw new Error('setMinute allows the range from 0 to 59.');
+        }
+        this._params.minute = minute;
+    };
+    Bounce.prototype.setPage = function (page) {
+        this._params.page = page;
+    };
+    Bounce.prototype.setLimit = function (limit) {
+        this._limit = limit;
+    };
+    Bounce.prototype.getDate = function (d) {
+        return d.getFullYear() + "-" + ('00' + (d.getMonth() + 1)).slice(-2) + "-" + d.getDate();
+    };
+    return Bounce;
 }());
-exports["default"] = CustomersMailCloud;
+exports["default"] = Bounce;

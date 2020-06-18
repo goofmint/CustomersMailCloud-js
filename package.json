@@ -1,10 +1,11 @@
 {
   "name": "customersmailcloud",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "mocha --resolveJsonModule --require ts-node/register --watch-extensions ts \"test/**/*.ts\""
+    "test": "mocha --resolveJsonModule --require ts-node/register --watch-extensions ts \"test/**/*.ts\"",
+    "build": "tsc --outDir . src/index.ts"
   },
   "author": "Atsushi Nakatsugawa",
   "license": "MIT",
