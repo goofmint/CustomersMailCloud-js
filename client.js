@@ -47,6 +47,7 @@ var CustomersMailCloud = /** @class */ (function () {
         this._subject = null;
         this._text = null;
         this._html = null;
+        this._attachments = [];
         this.apiUser = apiUser;
         this.apiKey = apiKey;
     }
@@ -83,6 +84,10 @@ var CustomersMailCloud = /** @class */ (function () {
         this._html = str;
         return this;
     };
+    CustomersMailCloud.prototype.addAttachments = function (path) {
+        this._attachments.push(path);
+        return this;
+    };
     CustomersMailCloud.prototype.url = function () {
         switch (this._type) {
             case 1:
@@ -97,7 +102,7 @@ var CustomersMailCloud = /** @class */ (function () {
     };
     CustomersMailCloud.prototype.send = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var params, result;
+            var params, req, key, i, result, e_1;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -111,12 +116,32 @@ var CustomersMailCloud = /** @class */ (function () {
                         };
                         if (this._html)
                             params.html = this._html;
-                        return [4 /*yield*/, request
-                                .post(this.url())
-                                .send(params)];
+                        req = request.post(this.url());
+                        if (this._attachments.length > 0) {
+                            req.type('form');
+                            params.attachments = this._attachments.length;
+                            for (key in params) {
+                                req.field(key, typeof params[key] === 'object' ? JSON.stringify(params[key]) : params[key]);
+                            }
+                            for (i = 0; i < this._attachments.length; i++) {
+                                req.attach("attachment" + (i + 1), this._attachments[i]);
+                            }
+                        }
+                        else {
+                            req.send(params);
+                        }
+                        _a.label = 1;
                     case 1:
+                        _a.trys.push([1, 3, , 4]);
+                        return [4 /*yield*/, req];
+                    case 2:
                         result = _a.sent();
                         return [2 /*return*/, result.body];
+                    case 3:
+                        e_1 = _a.sent();
+                        console.log(e_1);
+                        return [2 /*return*/, {}];
+                    case 4: return [2 /*return*/];
                 }
             });
         });

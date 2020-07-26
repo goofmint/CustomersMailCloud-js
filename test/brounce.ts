@@ -12,4 +12,4 @@ import fs from 'fs'
   bounce.setLimit(100)
   const res = await bounce.list()
   console.log(res)
-})()
+})

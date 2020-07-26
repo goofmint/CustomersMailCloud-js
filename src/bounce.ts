@@ -4,7 +4,6 @@ import { CMCMail, CMCMailKeys } from './mail'
 
 class Bounce {
   _client: CustomersMailCloud
-  _limit: number = 10
   _serverComposition: string | null = null
   _params: {[key: string]: string | number} = {}
   _url: string = 'https://api.smtps.jp/transaction/v2/bounces/list.json'
@@ -70,11 +69,11 @@ class Bounce {
   }
   
   setPage(page: number) {
-    this._params.page = page
+    this._params.p = page
   }
 
   setLimit(limit: number) {
-    this._limit = limit
+    this._params.r = limit
   }
 
   getDate(d: Date) {

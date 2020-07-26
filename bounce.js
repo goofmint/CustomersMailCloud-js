@@ -40,7 +40,6 @@ var request = require("superagent");
 var mail_1 = require("./mail");
 var Bounce = /** @class */ (function () {
     function Bounce(client) {
-        this._limit = 10;
         this._serverComposition = null;
         this._params = {};
         this._url = 'https://api.smtps.jp/transaction/v2/bounces/list.json';
@@ -106,10 +105,10 @@ var Bounce = /** @class */ (function () {
         this._params.minute = minute;
     };
     Bounce.prototype.setPage = function (page) {
-        this._params.page = page;
+        this._params.p = page;
     };
     Bounce.prototype.setLimit = function (limit) {
-        this._limit = limit;
+        this._params.r = limit;
     };
     Bounce.prototype.getDate = function (d) {
         return d.getFullYear() + "-" + ('00' + (d.getMonth() + 1)).slice(-2) + "-" + d.getDate();
