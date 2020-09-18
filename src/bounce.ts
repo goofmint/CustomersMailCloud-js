@@ -1,6 +1,7 @@
 import * as request from 'superagent'
 import CustomersMailCloud from './client'
-import { CMCMail, CMCMailKeys } from './mail'
+import { CMCMailKeys } from '../types/mail'
+import { CMCMail } from './mail'
 
 class Bounce {
   _client: CustomersMailCloud
