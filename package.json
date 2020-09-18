@@ -1,8 +1,7 @@
 {
   "name": "customersmailcloud",
-  "version": "1.2.2",
+  "version": "1.2.3",
   "description": "",
-  "main": "index.js",
   "scripts": {
     "test": "mocha --resolveJsonModule --require ts-node/register --watch-extensions ts \"test/**/*.ts\"",
     "build": "tsc --outDir . src/index.ts"
