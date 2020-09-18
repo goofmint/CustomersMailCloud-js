@@ -5,17 +5,21 @@ class CustomersMailCloud {
   apiUser: string
   apiKey: string
   _type: number = 0
-  _subdomain: string | null = null
+  _subdomain: string | null
   _to: {[key: string]: string}[] = []
   _from: {[key: string]: string} = {}
-  _subject: string | null = null
-  _text: string | null = null
-  _html: string | null = null
+  _subject: string | null
+  _text: string | null
+  _html: string | null
   _attachments: string[] = []
 
   constructor(apiUser:string, apiKey: string) {
     this.apiUser = apiUser
     this.apiKey = apiKey
+    this._subdomain = null
+    this._subject = null
+    this._text = null
+    this._html = null
   }
 
   pro(subdomain:string): CustomersMailCloud {

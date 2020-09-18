@@ -1,10 +1,10 @@
 {
   "name": "customersmailcloud",
-  "version": "1.2.3",
+  "version": "1.2.4",
   "description": "",
   "scripts": {
     "test": "mocha --resolveJsonModule --require ts-node/register --watch-extensions ts \"test/**/*.ts\"",
-    "build": "tsc --outDir . src/index.ts"
+    "build": "tsc --outDir . ./*.ts && tsc --outDir . ./src/*.ts"
   },
   "author": "Atsushi Nakatsugawa",
   "license": "MIT",
