@@ -37,7 +37,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 exports.__esModule = true;
 var request = require("superagent");
-var bounce_1 = require("./bounce");
+var transaction_1 = require("./transaction");
 var CustomersMailCloud = /** @class */ (function () {
     function CustomersMailCloud(apiUser, apiKey) {
         this._type = 0;
@@ -147,7 +147,13 @@ var CustomersMailCloud = /** @class */ (function () {
         });
     };
     CustomersMailCloud.prototype.bounce = function () {
-        return new bounce_1["default"](this);
+        return new transaction_1["default"]('bounces', this);
+    };
+    CustomersMailCloud.prototype.block = function () {
+        return new transaction_1["default"]('blocks', this);
+    };
+    CustomersMailCloud.prototype.delivery = function () {
+        return new transaction_1["default"]('deliveries', this);
     };
     return CustomersMailCloud;
 }());

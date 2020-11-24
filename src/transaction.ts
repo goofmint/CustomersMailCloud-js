@@ -1,15 +1,22 @@
-import * as request from 'superagent'
 import CustomersMailCloud from './client'
-import { CMCMailKeys } from '../types/mail'
 import { CMCMail } from './mail'
+import { CMCMailKeys } from '../types/mail'
+import * as request from 'superagent'
 
-class Bounce {
+class Transaction {
   _client: CustomersMailCloud
   _serverComposition: string | null = null
   _params: {[key: string]: string | number} = {}
-  _url: string = 'https://api.smtps.jp/transaction/v2/bounces/list.json'
-  constructor(client: CustomersMailCloud) {
+  _type: string
+  _baseUrl: string = 'https://api.smtps.jp/transaction/v2/__TYPE__/__ACTION__.json'
+
+  constructor(type: string, client: CustomersMailCloud) {
+    this._type = type
     this._client = client
+  }
+
+  url(action: string) {
+    return this._baseUrl.replace('__TYPE__', this._type).replace('__ACTION__', action)
   }
 
   async list(): Promise<CMCMail[]> {
@@ -21,14 +28,18 @@ class Bounce {
     } else {
       throw new Error('Server Composition is required.')
     }
-    const result = await request
-      .post(this._url)
-      .send(params)
-    if (!result.body.bounces) {
-      return []
+    try {
+      const result = await request
+        .post(this.url('list'))
+        .send(params)
+      if (!result.body[this._type]) {
+        return []
+      }
+      const bounces: CMCMailKeys[] = result.body[this._type]
+      return bounces.map(params => new CMCMail(params))
+    } catch (e) {
+      throw new Error(e.response.text)
     }
-    const bounces: CMCMailKeys[] = result.body.bounces
-    return bounces.map(params => new CMCMail(params))
   }
 
   setServerComposition(name: string) {
@@ -78,8 +89,8 @@ class Bounce {
   }
 
   getDate(d: Date) {
-    return `${d.getFullYear()}-${('00' + (d.getMonth() + 1)).slice(-2)}-${d.getDate()}`
+    return `${d.getFullYear()}-${('00' + (d.getMonth() + 1)).slice(-2)}-${('00' + d.getDate()).slice(-2)}`
   }
 }
 
-export default Bounce
+export default Transaction;

@@ -16,4 +16,4 @@ import fs from 'fs'
     .addAttachments('./package.json')
     .send()
   console.log(res)
-})()
+})

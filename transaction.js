@@ -36,18 +36,22 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 exports.__esModule = true;
-var request = require("superagent");
 var mail_1 = require("./mail");
-var Bounce = /** @class */ (function () {
-    function Bounce(client) {
+var request = require("superagent");
+var Transaction = /** @class */ (function () {
+    function Transaction(type, client) {
         this._serverComposition = null;
         this._params = {};
-        this._url = 'https://api.smtps.jp/transaction/v2/bounces/list.json';
+        this._baseUrl = 'https://api.smtps.jp/transaction/v2/__TYPE__/__ACTION__.json';
+        this._type = type;
         this._client = client;
     }
-    Bounce.prototype.list = function () {
+    Transaction.prototype.url = function (action) {
+        return this._baseUrl.replace('__TYPE__', this._type).replace('__ACTION__', action);
+    };
+    Transaction.prototype.list = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var params, result, bounces;
+            var params, result, bounces, e_1;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -60,59 +64,66 @@ var Bounce = /** @class */ (function () {
                         else {
                             throw new Error('Server Composition is required.');
                         }
-                        return [4 /*yield*/, request
-                                .post(this._url)
-                                .send(params)];
+                        _a.label = 1;
                     case 1:
+                        _a.trys.push([1, 3, , 4]);
+                        return [4 /*yield*/, request
+                                .post(this.url('list'))
+                                .send(params)];
+                    case 2:
                         result = _a.sent();
-                        if (!result.body.bounces) {
+                        if (!result.body[this._type]) {
                             return [2 /*return*/, []];
                         }
-                        bounces = result.body.bounces;
+                        bounces = result.body[this._type];
                         return [2 /*return*/, bounces.map(function (params) { return new mail_1.CMCMail(params); })];
+                    case 3:
+                        e_1 = _a.sent();
+                        throw new Error(e_1.response.text);
+                    case 4: return [2 /*return*/];
                 }
             });
         });
     };
-    Bounce.prototype.setServerComposition = function (name) {
+    Transaction.prototype.setServerComposition = function (name) {
         this._serverComposition = name;
     };
-    Bounce.prototype.setEmail = function (address) {
+    Transaction.prototype.setEmail = function (address) {
         this._params.email = address;
     };
-    Bounce.prototype.setStatus = function (status) {
+    Transaction.prototype.setStatus = function (status) {
         this._params.status = status;
     };
-    Bounce.prototype.setStartDate = function (date) {
+    Transaction.prototype.setStartDate = function (date) {
         this._params.start_date = this.getDate(date);
     };
-    Bounce.prototype.setEndDate = function (date) {
+    Transaction.prototype.setEndDate = function (date) {
         this._params.end_date = this.getDate(date);
     };
-    Bounce.prototype.setDate = function (date) {
+    Transaction.prototype.setDate = function (date) {
         this._params.date = this.getDate(date);
     };
-    Bounce.prototype.setHour = function (hour) {
+    Transaction.prototype.setHour = function (hour) {
         if (hour < 0 || hour > 23) {
             throw new Error('setHour allows the range from 0 to 23.');
         }
         this._params.hour = hour;
     };
-    Bounce.prototype.setMinute = function (minute) {
+    Transaction.prototype.setMinute = function (minute) {
         if (minute < 0 || minute > 59) {
             throw new Error('setMinute allows the range from 0 to 59.');
         }
         this._params.minute = minute;
     };
-    Bounce.prototype.setPage = function (page) {
+    Transaction.prototype.setPage = function (page) {
         this._params.p = page;
     };
-    Bounce.prototype.setLimit = function (limit) {
+    Transaction.prototype.setLimit = function (limit) {
         this._params.r = limit;
     };
-    Bounce.prototype.getDate = function (d) {
-        return d.getFullYear() + "-" + ('00' + (d.getMonth() + 1)).slice(-2) + "-" + d.getDate();
+    Transaction.prototype.getDate = function (d) {
+        return d.getFullYear() + "-" + ('00' + (d.getMonth() + 1)).slice(-2) + "-" + ('00' + d.getDate()).slice(-2);
     };
-    return Bounce;
+    return Transaction;
 }());
-exports["default"] = Bounce;
+exports["default"] = Transaction;

@@ -1,5 +1,5 @@
 import * as request from 'superagent'
-import Bounce from './bounce'
+import Transaction from './transaction'
 
 class CustomersMailCloud {
   apiUser: string
@@ -114,9 +114,18 @@ class CustomersMailCloud {
     }
   }
 
-  bounce(): Bounce {
-    return new Bounce(this)
+  bounce(): Transaction {
+    return new Transaction('bounces', this);
   }
+
+  block(): Transaction {
+    return new Transaction('blocks', this);
+  }
+
+  delivery(): Transaction {
+    return new Transaction('deliveries', this);
+  }
+
 }
 
 export default CustomersMailCloud
