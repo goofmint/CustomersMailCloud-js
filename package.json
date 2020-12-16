@@ -1,5 +1,5 @@
 {
-  "name": "customers-mail-cloud",
+  "name": "@goofmint/customers-mail-cloud",
   "version": "1.2.6",
   "description": "",
   "scripts": {
