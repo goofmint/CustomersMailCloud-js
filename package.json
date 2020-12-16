@@ -9,6 +9,8 @@
   "author": "Atsushi Nakatsugawa",
   "license": "MIT",
   "devDependencies": {
+    "chai": "^4.2.0",
+    "mocha": "^8.2.1",
     "@types/chai": "^4.2.11",
     "@types/mocha": "^7.0.2",
     "@types/superagent": "^4.1.10",
@@ -16,8 +18,6 @@
     "typescript": "^3.9.5"
   },
   "dependencies": {
-    "superagent": "^5.2.2",
-    "chai": "^4.2.0",
-    "mocha": "^8.2.1"
+    "superagent": "^5.2.2"
   }
 }
