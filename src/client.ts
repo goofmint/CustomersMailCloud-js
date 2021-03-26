@@ -7,6 +7,8 @@ class CustomersMailCloud {
   _type: number = 0
   _subdomain: string | null
   _to: {[key: string]: string}[] = []
+  _cc: {[key: string]: string}[] = []
+  _bcc: {[key: string]: string}[] = []
   _from: {[key: string]: string} = {}
   _subject: string | null
   _text: string | null
@@ -40,6 +42,16 @@ class CustomersMailCloud {
 
   addTo(name: string, address: string): CustomersMailCloud {
     this._to.push({name, address})
+    return this
+  }
+
+  addCC(name: string, address: string): CustomersMailCloud {
+    this._cc.push({name, address})
+    return this
+  }
+
+  addBcc(name: string, address: string): CustomersMailCloud {
+    this._bcc.push({name, address})
     return this
   }
 
@@ -86,12 +98,14 @@ class CustomersMailCloud {
       api_user: this.apiUser,
       api_key: this.apiKey,
       to: this._to,
+      cc: this._cc,
+      bcc: this._bcc,
       from: this._from,
       subject: this._subject,
       text: this._text,
     }
+    console.log(params)
     if (this._html) params.html = this._html
-
     const req = request.post(this.url())
     if (this._attachments.length > 0) {
       req.type('form')
@@ -107,9 +121,10 @@ class CustomersMailCloud {
     }
     try {
       const result = await req;
+      console.log('result.body', result.body);
       return result.body
     } catch (e) {
-      console.log(e)
+      console.error('e', e)
       return {}
     }
   }

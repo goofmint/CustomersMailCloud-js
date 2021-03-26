@@ -2,7 +2,7 @@
 
 ## Install
 
-`npm i customers-mail-cloud`
+`npm i @moongift/customers-mail-cloud`
 
 ## Usage
 

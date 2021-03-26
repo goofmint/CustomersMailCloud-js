@@ -42,6 +42,8 @@ var CustomersMailCloud = /** @class */ (function () {
     function CustomersMailCloud(apiUser, apiKey) {
         this._type = 0;
         this._to = [];
+        this._cc = [];
+        this._bcc = [];
         this._from = {};
         this._attachments = [];
         this.apiUser = apiUser;
@@ -66,6 +68,14 @@ var CustomersMailCloud = /** @class */ (function () {
     };
     CustomersMailCloud.prototype.addTo = function (name, address) {
         this._to.push({ name: name, address: address });
+        return this;
+    };
+    CustomersMailCloud.prototype.addCC = function (name, address) {
+        this._cc.push({ name: name, address: address });
+        return this;
+    };
+    CustomersMailCloud.prototype.addBcc = function (name, address) {
+        this._bcc.push({ name: name, address: address });
         return this;
     };
     CustomersMailCloud.prototype.setFrom = function (name, address) {
@@ -110,10 +120,13 @@ var CustomersMailCloud = /** @class */ (function () {
                             api_user: this.apiUser,
                             api_key: this.apiKey,
                             to: this._to,
+                            cc: this._cc,
+                            bcc: this._bcc,
                             from: this._from,
                             subject: this._subject,
                             text: this._text
                         };
+                        console.log(params);
                         if (this._html)
                             params.html = this._html;
                         req = request.post(this.url());
@@ -136,10 +149,11 @@ var CustomersMailCloud = /** @class */ (function () {
                         return [4 /*yield*/, req];
                     case 2:
                         result = _a.sent();
+                        console.log('result.body', result.body);
                         return [2 /*return*/, result.body];
                     case 3:
                         e_1 = _a.sent();
-                        console.log(e_1);
+                        console.error('e', e_1);
                         return [2 /*return*/, {}];
                     case 4: return [2 /*return*/];
                 }

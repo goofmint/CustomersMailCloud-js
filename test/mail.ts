@@ -10,10 +10,12 @@ import fs from 'fs'
     .trial()
     .setFrom(config.from.name, config.from.address)
     .addTo(config.to.name, config.to.address)
+    .addCC('cc', 'cc@moongift.jp')
+    .addBcc('bcc', 'moongift@gmail.com')
     .setSubject('テストメール')
     .setText('これはNode.jsライブラリから送信されたテストメールです')
     .addAttachments('./test.png')
     .addAttachments('./package.json')
     .send()
   console.log(res)
-})
+})();
