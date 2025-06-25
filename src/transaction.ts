@@ -1,4 +1,4 @@
-import CustomersMailCloud from './client'
+import { CustomersMailCloud } from './'
 import { CMCMail } from './mail'
 import { CMCMailKeys } from '../types/mail'
 import * as request from 'superagent'

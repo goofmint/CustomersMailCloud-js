@@ -1,10 +1,10 @@
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.CMCMail = void 0;
-var CMCMail = /** @class */ (function () {
-    function CMCMail(params) {
+class CMCMail {
+    constructor(params) {
         this.fields = {};
-        for (var key in params) {
+        for (let key in params) {
             switch (key) {
                 case 'created':
                     this.fields.created = new Date(params[key]);
@@ -18,6 +18,5 @@ var CMCMail = /** @class */ (function () {
             }
         }
     }
-    return CMCMail;
-}());
+}
 exports.CMCMail = CMCMail;
